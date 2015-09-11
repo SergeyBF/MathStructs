@@ -21,6 +21,5 @@ namespace SergeyMS
         LinearSpace<T> MultiplyScarar(LinearSpace<T> Element, T Scalar);
         bool Equals(LinearSpace<T> Element1, LinearSpace<T> Element2);
         int GetHashCode();
-        LinearSpace<T> Neutral_element { get; }
     }
 }

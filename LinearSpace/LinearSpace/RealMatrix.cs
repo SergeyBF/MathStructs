@@ -191,7 +191,7 @@ namespace SergeyMS
         /// *********************************************************************************************************
         /// Linear Space interface criterias.
         /// </summary>
-        public static RealMatrix<T> Operation(RealMatrix<T> ELEMENT1, RealMatrix<T> ELEMENT2)
+        public LinearSpace<T> Operation(LinearSpace<T> ELEMENT1, LinearSpace<T> ELEMENT2)
         {
             if (ELEMENT1.RowNumber != ELEMENT2.RowNumber || ELEMENT1.ColNumber != ELEMENT2.ColNumber)
             {//Addition mathematical rules, handle only part of null matrix situation
@@ -322,9 +322,8 @@ namespace SergeyMS
         {
             return !(ELEMENT1 == ELEMENT2);
         }
-        protected RealMatrix<T> MultiplyScalar(T scalar, RealMatrix<T> ELEMENT1)
+        public RealMatrix<T> MultiplyScalar(T scalar, RealMatrix<T> ELEMENT1)
         {
-            RealMatrix<T> ELEMENT1 = new RealMatrix<T>(this)
             for (ulong i = 0; i < this.RowNumber; i++)
             {
                 for (ulong j = 0; j < this.ColNumber; j++)

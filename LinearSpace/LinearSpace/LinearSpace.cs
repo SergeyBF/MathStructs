@@ -18,7 +18,6 @@ namespace SergeyMS
         LinearSpace<T> Operation(LinearSpace<T> Element1, LinearSpace<T> Element2);
         LinearSpace<T> Operation_inverse(LinearSpace<T> Element1, LinearSpace<T> Element2);
         LinearSpace<T> MultiplyScarar(T Scalar, LinearSpace<T> Element);
-        LinearSpace<T> MultiplyScarar(LinearSpace<T> Element, T Scalar);
         bool Equals(LinearSpace<T> Element1, LinearSpace<T> Element2);
         int GetHashCode();
     }

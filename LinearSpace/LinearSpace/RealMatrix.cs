@@ -194,12 +194,7 @@ namespace SergeyMS
         /// </summary>
         LinearSpace<T> LinearSpace<T>.Operation(LinearSpace<T> ELEMENT3, LinearSpace<T> ELEMENT4)
         {
-            if (ELEMENT3 is RealMatrix<T>)
-            {
-                RealMatrix<T> ELEMENT1 = (RealMatrix<T>)ELEMENT3;
-            }
-            else
-                throw new Exception();
+            RealMatrix<T> ELEMENT1 = (RealMatrix<T>)ELEMENT3;
             RealMatrix<T> ELEMENT2 = (RealMatrix<T>)ELEMENT4;
             if (ELEMENT1.RowNumber != ELEMENT2.RowNumber || ELEMENT1.ColNumber != ELEMENT2.ColNumber)
             {//Addition mathematical rules, handle only part of null matrix situation
@@ -237,7 +232,11 @@ namespace SergeyMS
         public static RealMatrix<T> operator +(RealMatrix<T> ELEMNET1, RealMatrix<T> ELEMENT2)
         {
             RealMatrix<T> ELEMENT3 = new RealMatrix<T>(ELEMNET1.RowNumber, ELEMNET1.ColNumber);
-            return ELEMENT3 as (LinearSpace<T>.Operation((LinearSpace<T>)ELEMNET1, (LinearSpace<T>)ELEMENT2));
+
+            ELEMENT3 = (RealMatrix<T>)((LinearSpace<T>)ELEMENT3).Operation((LinearSpace<T>)ELEMNET1, (LinearSpace<T>)ELEMENT2);
+            return ELEMENT3;
+            //RealMatrix<T> ELEMENT3 = new RealMatrix<T>(ELEMNET1.RowNumber, ELEMNET1.ColNumber);
+            //return ELEMENT3 as (LinearSpace<T>.Operation((LinearSpace<T>)ELEMNET1, (LinearSpace<T>)ELEMENT2));
         }
         /*
         protected static RealMatrix<T> Operation_inverse(RealMatrix<T> ELEMENT3, RealMatrix<T> ELEMENT4)

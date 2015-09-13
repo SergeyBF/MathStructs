@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SergeyMS
 {
     /// <summary>
-    /// v
+    /// vv
     /// Class of general Matrix
     /// <remarks>
     /// This class work with value types only.

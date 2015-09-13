@@ -14,7 +14,7 @@ namespace SergeyMS
     /// </remarks>
     /// </summary>
     /// <typeparam name="T"> This is a value type and it must to satisfy the IConcerible interface criterias.</typeparam>
-    class RealMatrix<T> : LinearSpace<T>, IDisposable where T : IConvertible
+    public class RealMatrix<T> : LinearSpace<T>, IDisposable where T : IConvertible
     {
         /// <summary>
         /// Data members:
@@ -192,8 +192,15 @@ namespace SergeyMS
         /// *********************************************************************************************************
         /// Linear Space interface criterias.
         /// </summary>
-        public LinearSpace<T> Operation(LinearSpace<T> ELEMENT1, LinearSpace<T> ELEMENT2)
+        LinearSpace<T> LinearSpace<T>.Operation(LinearSpace<T> ELEMENT3, LinearSpace<T> ELEMENT4)
         {
+            if (ELEMENT3 is RealMatrix<T>)
+            {
+                RealMatrix<T> ELEMENT1 = (RealMatrix<T>)ELEMENT3;
+            }
+            else
+                throw new Exception();
+            RealMatrix<T> ELEMENT2 = (RealMatrix<T>)ELEMENT4;
             if (ELEMENT1.RowNumber != ELEMENT2.RowNumber || ELEMENT1.ColNumber != ELEMENT2.ColNumber)
             {//Addition mathematical rules, handle only part of null matrix situation
                 string message = "Operation fail: can not use '+' operator for matrix (" + ELEMENT1.RowNumber + " x " + ELEMENT1.ColNumber + ") and matrix ("
@@ -204,7 +211,7 @@ namespace SergeyMS
             {//this protect when all of them is null
                 return null;
             }
-            RealMatrix<T> ELEMENT3 = new RealMatrix<T>(ELEMENT1.RowNumber, ELEMENT1.ColNumber);
+            RealMatrix<T> ELEMENT5 = new RealMatrix<T>(ELEMENT1.RowNumber, ELEMENT1.ColNumber);
             var type = typeof(T);
             if (type == typeof(String) || type == typeof(DateTime))
             {
@@ -217,7 +224,7 @@ namespace SergeyMS
                     //ELEMENT3[i, j] = ELEMENT1[i, j] + ELEMENT2[i, j];
                     try
                     {
-                        ELEMENT3[i, j] = (T)(Object)(ELEMENT1[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) + ELEMENT2[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo));
+                        ELEMENT5[i, j] = (T)(Object)(ELEMENT1[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) + ELEMENT2[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo));
                     }
                     catch (Exception ex)
                     {
@@ -225,14 +232,18 @@ namespace SergeyMS
                     }
                 }
             }
-            return ELEMENT3;
+            return ELEMENT5;
         }
         public static RealMatrix<T> operator +(RealMatrix<T> ELEMNET1, RealMatrix<T> ELEMENT2)
         {
-            return Operation(ELEMNET1, ELEMENT2);
+            RealMatrix<T> ELEMENT3 = new RealMatrix<T>(ELEMNET1.RowNumber, ELEMNET1.ColNumber);
+            return ELEMENT3 as (LinearSpace<T>.Operation((LinearSpace<T>)ELEMNET1, (LinearSpace<T>)ELEMENT2));
         }
-        protected static RealMatrix<T> Operation_inverse(RealMatrix<T> ELEMENT1, RealMatrix<T> ELEMENT2)
+        /*
+        protected static RealMatrix<T> Operation_inverse(RealMatrix<T> ELEMENT3, RealMatrix<T> ELEMENT4)
         {
+            RealMatrix<T> ELEMENT1 = (RealMatrix<T>)ELEMENT3;
+            RealMatrix<T> ELEMENT2 = (RealMatrix<T>)ELEMENT4;
             if (ELEMENT1.RowNumber != ELEMENT2.RowNumber || ELEMENT1.ColNumber != ELEMENT2.ColNumber)
             {//Addition mathematical rules, handle only part of null matrix situation
                 string message = "Operation fail: can not use '+' operator for matrix (" + ELEMENT1.RowNumber + " x " + ELEMENT1.ColNumber + ") and matrix ("
@@ -333,6 +344,6 @@ namespace SergeyMS
                 }
             }
         }
-
+        */
     }
 }

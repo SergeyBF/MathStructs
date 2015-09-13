@@ -16,9 +16,9 @@ namespace SergeyMS
     public interface LinearSpace<T> where T : IConvertible
     {
         LinearSpace<T> Operation(LinearSpace<T> Element1, LinearSpace<T> Element2);
-        LinearSpace<T> Operation_inverse(LinearSpace<T> Element1, LinearSpace<T> Element2);
-        LinearSpace<T> MultiplyScarar(T Scalar, LinearSpace<T> Element);
-        bool Equals(LinearSpace<T> Element1, LinearSpace<T> Element2);
-        int GetHashCode();
+        //LinearSpace<T> Operation_inverse(LinearSpace<T> Element1, LinearSpace<T> Element2);
+        //LinearSpace<T> MultiplyScarar(T Scalar, LinearSpace<T> Element);
+        //bool Equals(LinearSpace<T> Element1, LinearSpace<T> Element2);
+        //int GetHashCode();
     }
 }

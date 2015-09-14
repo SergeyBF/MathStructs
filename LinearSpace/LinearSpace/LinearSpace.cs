@@ -9,14 +9,14 @@ namespace SergeyMS
     /// <summary>
     /// Linear Space interface
     /// <remarks>
-    /// This contain the criterias of mathematical axiomas for Linear Space.
+    /// This contain the criterias of mathematical axiomas for Linear Space. The structure will work only mathematical types.
     /// </remarks>
     /// </summary>
     /// <typeparam name="T"> This type param is only for real number typed variables. </typeparam>
     public interface LinearSpace<T> where T : IConvertible
     {
         LinearSpace<T> Operation(LinearSpace<T> Element1, LinearSpace<T> Element2);
-        //LinearSpace<T> Operation_inverse(LinearSpace<T> Element1, LinearSpace<T> Element2);
+        LinearSpace<T> OperationInverse(LinearSpace<T> Element1, LinearSpace<T> Element2);
         //LinearSpace<T> MultiplyScarar(T Scalar, LinearSpace<T> Element);
         //bool Equals(LinearSpace<T> Element1, LinearSpace<T> Element2);
         //int GetHashCode();

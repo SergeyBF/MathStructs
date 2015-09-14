@@ -73,7 +73,7 @@ namespace SergeyMS
         /// <param name="rows">Number of matrix rows.</param>
         /// <param name="cols">Number of matrix columns.</param>
         /// <returns></returns>
-        public RealMatrix<T> Create(ulong rows, ulong cols)
+        public static RealMatrix<T> Create(ulong rows, ulong cols)
         {
             if(rows == 0 || cols == 0)
             {
@@ -186,6 +186,7 @@ namespace SergeyMS
             {
                 if (!infSetted)
                     infLimit = value;
+                infSetted = true;
             }
         }
         ///<summary>
@@ -227,13 +228,13 @@ namespace SergeyMS
                     }
                 }
             }
-            return ELEMENT5;
+            return ELEMENT5 as LinearSpace<T>;
         }
         public static RealMatrix<T> operator +(RealMatrix<T> ELEMNET1, RealMatrix<T> ELEMENT2)
         {
             RealMatrix<T> ELEMENT3 = new RealMatrix<T>(ELEMNET1.RowNumber, ELEMNET1.ColNumber);
 
-            ELEMENT3 = (RealMatrix<T>)((LinearSpace<T>)ELEMENT3).Operation((LinearSpace<T>)ELEMNET1, (LinearSpace<T>)ELEMENT2);
+            ELEMENT3 = (RealMatrix<T>)(ELEMENT3 as LinearSpace<T>).Operation(ELEMNET1 as LinearSpace<T>, ELEMENT2 as LinearSpace<T>);
             return ELEMENT3;
             //RealMatrix<T> ELEMENT3 = new RealMatrix<T>(ELEMNET1.RowNumber, ELEMNET1.ColNumber);
             //return ELEMENT3 as (LinearSpace<T>.Operation((LinearSpace<T>)ELEMNET1, (LinearSpace<T>)ELEMENT2));

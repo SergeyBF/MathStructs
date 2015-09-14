@@ -13,7 +13,7 @@ namespace SergeyMS
     /// </remarks>
     /// </summary>
     /// <typeparam name="T"> This is a value type and it must to satisfy the IConcerible interface criterias.</typeparam>
-    public class RealMatrix<T> : LinearSpace<T>, IDisposable where T : IConvertible
+    public class RealMatrix<T> : LinearSpace<T>, IDisposable where T : IConvertible, IEquatable<T>
     {
         /// <summary>
         /// Data members:
@@ -217,6 +217,7 @@ namespace SergeyMS
         /// <summary>
         /// Get-set accerssor for infinity value.
         /// The set accessor has one chance to modify and it will belong for all instance.
+        /// Warning: Using standard integer types, NO set it.
         /// <value>
         /// Set one infinity limit value for all distance. The setting is final.
         /// </value>
@@ -236,6 +237,7 @@ namespace SergeyMS
         }
         /// <summary>
         /// Get accessor to check if infinity limit is already setted.
+        /// Warning: Using standard integer types, NO set infinity value.
         /// </summary>
         public bool infinitySetted
         {
@@ -250,7 +252,7 @@ namespace SergeyMS
         /// </summary>
         /// <summary>
         /// Linear Space over T mathematical body contain an additional operation.
-        /// This method is from interface but hidden, because there is + operator overload for the additional operation.
+        /// This method is from interface but hidden, because there is '+' operator overload for the additional operation.
         /// </summary>
         /// <param name="Element3"> In method declaration seem like the parameter type is LinearSpace but it must be RealMatrix instance.</param>
         /// <param name="Element4"> In method declaration seem like the parameter type is LinearSpace but it must be RealMatrix instance.</param>
@@ -310,13 +312,9 @@ namespace SergeyMS
         {
             return (dynamic)Value1 + (dynamic)Value2;
         }
-        ///<summary>
-        /// *********************************************************************************************************
-        /// Linear Space interface criterias.
-        /// </summary>
         /// <summary>
-        /// Linear Space over T mathematical body contain an additional operation.
-        /// This method is from interface but hidden, because there is + operator overload for the additional operation.
+        /// Linear Space over T mathematical body contain an inverse additional operation.
+        /// This method is from interface but hidden, because there is '-' operator overload for the inverse additional operation.
         /// </summary>
         /// <param name="Element3"> In method declaration seem like the parameter type is LinearSpace but it must be RealMatrix instance.</param>
         /// <param name="Element4"> In method declaration seem like the parameter type is LinearSpace but it must be RealMatrix instance.</param>
@@ -354,7 +352,7 @@ namespace SergeyMS
             return Element5 as LinearSpace<T>;
         }
         /// <summary>
-        /// The real public additional operation of Linear Space. The operation is commutative so not important the parameter's order.
+        /// The real public additional inverse operation of Linear Space. The operation is commutative so not important the parameter's order.
         /// </summary>
         /// <param name="ELEMNET1">Get one of the real matrix instances.</param>
         /// <param name="Element2">Get other one of the real matrix instances.</param>
@@ -376,56 +374,20 @@ namespace SergeyMS
         {
             return (dynamic)Value1 - (dynamic)Value2;
         }
-        /*
-        protected static RealMatrix<T> Operation_inverse(RealMatrix<T> Element3, RealMatrix<T> Element4)
-        {
-            RealMatrix<T> Element1 = (RealMatrix<T>)Element3;
-            RealMatrix<T> Element2 = (RealMatrix<T>)Element4;
-            if (Element1.RowNumber != Element2.RowNumber || Element1.ColNumber != Element2.ColNumber)
-            {//Addition mathematical rules, handle only part of null matrix situation
-                string message = "Operation fail: can not use '+' operator for matrix (" + Element1.RowNumber + " x " + Element1.ColNumber + ") and matrix ("
-                    + Element2.RowNumber + " x " + Element2.ColNumber + ")";
-                throw new System.Exception(message);
-            }
-            if (Element1 == null || Element2 == null)
-            {//this protect when all of them is null
-                return null;
-            }
-            RealMatrix<T> Element3 = new RealMatrix<T>(Element1.RowNumber, Element1.ColNumber);
-            var type = typeof(T);
-            if (type == typeof(String) || type == typeof(DateTime))
-            {
-                throw new ArgumentException(String.Format("The type {0} is not supported", type.FullName), "T");
-            }
-            for (ulong i = 0; i < Element1.RowNumber; i++)
-            {
-                for (ulong j = 0; j < Element1.ColNumber; j++)
-                {
-                    //Element3[i, j] = Element1[i, j] - Element2[i, j];
-                    try
-                    {
-                        Element3[i, j] = (T)(Object)(Element1[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) - Element2[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo));
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ApplicationException("The operation failed.", ex);
-                    }
-                }
-            }
-            return Element3;
-        }
-        public static RealMatrix<T> operator -(RealMatrix<T> ELEMNET1, RealMatrix<T> Element2)
-        {
-            return Operation_inverse(ELEMNET1, Element2);
-        }
-        public override bool Equals(System.Object obj)
+        
+        /// <summary>
+        /// This method compare two matrixes elements by element.
+        /// </summary>
+        /// <param name="obj"> Parameter can be anything but real compare will with two RealMatrix instance.</param>
+        /// <returns> Logical true, if instances are from RealMatrix class and all suitable pair of elements are equals.</returns>
+        public override bool Equals(object obj)
         {//this is safe
             if (obj == null)
             {
                 return false;
             }
             RealMatrix<T> Element1 = obj as RealMatrix<T>;
-            if ((System.Object)Element1 == null)
+            if ((object)Element1 == null)
             {
                 return false;
             }
@@ -433,54 +395,106 @@ namespace SergeyMS
             {
                 return false;
             }
-            for (ulong i = 0; i < Element1.RowNumber; i++)
+            if (infinitySetted)
             {
-                for (ulong j = 0; j < Element1.ColNumber; j++)
+                for (ulong i = 0; i < Element1.RowNumber; i++)
                 {
-                    var type = typeof(T);
-                    if (type == typeof(String) || type == typeof(DateTime))
+                    for (ulong j = 0; j < Element1.ColNumber; j++)
                     {
-                        throw new ArgumentException(String.Format("The type {0} is not supported", type.FullName), "T");
-                    }
-                    try
-                    {
-                        if (Element1[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) - this[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) > (double)(object)infinity
-                            || this[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) - Element1[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) > (double)(object)infinity)
+                        if ((dynamic)Element1[i, j] - (dynamic)this[i, j] > (dynamic)infinity || (dynamic)this[i, j] - (dynamic)Element1[i, j] > (dynamic)infinity)
                         {
                             return false;
                         }
                     }
-                    catch (Exception ex)
+                }
+            }else
+            {
+                for (ulong i = 0; i < Element1.RowNumber; i++)
+                {
+                    for (ulong j = 0; j < Element1.ColNumber; j++)
                     {
-                        return false;
-                        throw new ApplicationException("RETURN FALSE Check the type for Equals." + ex.Message);
+                        if ((dynamic)Element1[i, j] != (dynamic)this[i, j])
+                        {
+                            return false;
+                        }
                     }
                 }
             }
             return true;
         }
+        /// <summary>
+        /// Need for Equal method.
+        /// </summary>
+        /// <returns> A general hashcode. </returns>
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
+        /// <summary>
+        /// Overloaded operator for comforable equals operatuion. This work with only two RealMatrix instances.
+        /// </summary>
+        /// <param name="Element1"> An instance of RealMatrix class.</param>
+        /// <param name="Element2"> An instance of RealMatrix class.</param>
+        /// <returns>Logical true, if all suitable pair of elements are equals.</returns>
         public static bool operator ==(RealMatrix<T> Element1, RealMatrix<T> Element2)
         {
             return Element1.Equals(Element2);
         }
+        /// <summary>
+        /// Overloaded operator for comforable equals operatuion. This work with only two RealMatrix instances.
+        /// </summary>
+        /// <param name="Element1"> An instance of RealMatrix class.</param>
+        /// <param name="Element2"> An instance of RealMatrix class.</param></param>
+        /// <returns> Logical true, if all suitable pair of elements are equals.</returns>
         public static bool operator !=(RealMatrix<T> Element1, RealMatrix<T> Element2)
         {
             return !(Element1 == Element2);
         }
-        public RealMatrix<T> MultiplyScalar(T scalar, RealMatrix<T> Element1)
+        /// <summary>
+        /// Linear Space over T mathematical body contain a scalar-multiplication operation.
+        /// This method is from interface but hidden, because there is '*' operator overload for the inverse additional operation.
+        /// </summary>
+        /// <param name="Scalar"> A constant value from T.</param>
+        /// <param name="Element1"> A linear space element.</param>
+        /// <returns> The solution matrix as linear space element.</returns>
+        LinearSpace<T> LinearSpace<T>.MultiplyScalar(T Scalar, LinearSpace<T> Element1)
         {
+            RealMatrix<T> Element2 = (RealMatrix<T>)Element1;
+            RealMatrix<T> Element3 = new RealMatrix<T>(Element2.RowNumber, Element2.ColNumber);
             for (ulong i = 0; i < this.RowNumber; i++)
             {
                 for (ulong j = 0; j < this.ColNumber; j++)
                 {
-                    this[i, j] = (T)(Object)(this[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) * scalar.ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo));
+                    Element3[i, j] = (dynamic)Scalar * (dynamic)Element2[i, j];
+                    //this[i, j] = (T)(Object)(this[i, j].ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo) * scalar.ToDouble(System.Globalization.NumberFormatInfo.CurrentInfo));
                 }
             }
+            return (Element3 as LinearSpace<T>);
         }
-        */
+        /// <summary>
+        /// The real public scalar-multiplication operation of Linear Space. The operation is commutative so need an other overload.
+        /// </summary>
+        /// <param name="Scalar">A constant value from T.</param>
+        /// <param name="Element1"> A linear space element.</param>
+        /// <returns> The solution matrix as linear space element.</returns>
+        public static RealMatrix<T> operator *(T Scalar, RealMatrix<T> Element1)
+        {
+            RealMatrix<T> Element2 = new RealMatrix<T>(Element1.RowNumber, Element1.ColNumber);
+            Element2 = (RealMatrix<T>)(Element2 as LinearSpace<T>).MultiplyScalar(Scalar, Element1 as LinearSpace<T>);
+            return  Element2;
+        }
+        /// <summary>
+        /// The real public scalar-multiplication operation of Linear Space. The operation is commutative so need an other overload.
+        /// </summary>
+        /// <param name="Scalar">A constant value from T.</param>
+        /// <param name="Element1"> A linear space element.</param>
+        /// <returns> The solution matrix as linear space element.</returns>
+        public static RealMatrix<T> operator *(RealMatrix<T> Element1, T Scalar)
+        {
+            RealMatrix<T> Element2 = new RealMatrix<T>(Element1.RowNumber, Element1.ColNumber);
+            Element2 = (RealMatrix<T>)(Element2 as LinearSpace<T>).MultiplyScalar(Scalar, Element1 as LinearSpace<T>);
+            return Element2;
+        }
+
     }
 }

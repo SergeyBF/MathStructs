@@ -13,12 +13,12 @@ namespace SergeyMS
     /// </remarks>
     /// </summary>
     /// <typeparam name="T"> This type param is only for real number typed variables. </typeparam>
-    public interface LinearSpace<T> where T : IConvertible
+    public interface LinearSpace<T> where T : IConvertible, IEquatable<T>
     {
         LinearSpace<T> Operation(LinearSpace<T> Element1, LinearSpace<T> Element2);
         LinearSpace<T> OperationInverse(LinearSpace<T> Element1, LinearSpace<T> Element2);
-        //LinearSpace<T> MultiplyScarar(T Scalar, LinearSpace<T> Element);
-        //bool Equals(LinearSpace<T> Element1, LinearSpace<T> Element2);
-        //int GetHashCode();
+        LinearSpace<T> MultiplyScalar(T Scalar, LinearSpace<T> Element);
+        bool Equals(object obj);
+        int GetHashCode();
     }
 }

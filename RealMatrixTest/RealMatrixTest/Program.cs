@@ -52,7 +52,7 @@ namespace RealMatrixTest
             Z[0, 1] = 1;
             Z[1, 0] = Z[1, 2] = 137;
             Console.WriteLine(Z);
-            //The '-' operation fail, because its addition. 
+            //The '-' operation is working too
             Console.WriteLine(X - Y);
             //This is not working, I don't wonder
             //Console.WriteLine("X and Z equals: " + (X == Z) + "\n****\n");

@@ -361,7 +361,7 @@ namespace SergeyMS
         {
             RealMatrix<T> Element3 = new RealMatrix<T>(ELEMNET1.RowNumber, ELEMNET1.ColNumber);
 
-            Element3 = (RealMatrix<T>)(Element3 as LinearSpace<T>).Operation(ELEMNET1 as LinearSpace<T>, Element2 as LinearSpace<T>);
+            Element3 = (RealMatrix<T>)(Element3 as LinearSpace<T>).OperationInverse(ELEMNET1 as LinearSpace<T>, Element2 as LinearSpace<T>);
             return Element3;
         }
         /// <summary>

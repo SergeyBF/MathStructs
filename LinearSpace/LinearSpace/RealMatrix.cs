@@ -47,7 +47,7 @@ namespace SergeyMS
         /// </summary>
         /// <param name="rows"> Number of matrix rows, not modifyable.</param>
         /// <param name="cols"> Number of matrix columns, not modifyable.</param>
-        private RealMatrix(ulong rows, ulong cols)
+        protected RealMatrix(ulong rows, ulong cols)
         {
             /// <summary>
             /// Generic constructor get type from Create method.

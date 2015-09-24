@@ -13,7 +13,7 @@ namespace SergeyMS
         private ulong size;
         public QMatrix(ulong size) : base(size, size)
         {
-            //
+            //xyz
             this.size = size;
         }
         /*
